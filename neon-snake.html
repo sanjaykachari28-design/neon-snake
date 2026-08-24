@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neon Snake | PlayVexa</title><meta name="description" content="Classic snake with neon effects and increasing speed."><style>
+:root{--bg:#070b18;--panel:#10182c;--cyan:#64f5ff;--pink:#ff4fa3;--text:#f8fbff;--muted:#aab7d1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#21366d 0,#0b1125 35%,#050812 100%);color:var(--text);font-family:Inter,system-ui,Segoe UI,sans-serif;min-height:100vh}
+.wrap{width:min(960px,94%);margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.logo{font-size:24px;font-weight:950;letter-spacing:.5px}.logo i{color:var(--cyan);font-style:normal}.back{color:var(--cyan);text-decoration:none;font-weight:800}
+.panel{background:rgba(16,24,44,.88);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:20px;box-shadow:0 25px 70px #0008;backdrop-filter:blur(10px)}
+h1{margin:0 0 5px;font-size:clamp(28px,6vw,48px)}.desc{color:var(--muted);margin:0 0 14px}.stats{display:flex;justify-content:center;gap:25px;margin:12px 0;font-weight:850}.hint{text-align:center;color:var(--muted);margin:12px 0 0}
+canvas{display:block;width:100%;height:auto;max-width:760px;margin:auto;border-radius:18px;background:#050a16;border:1px solid #ffffff12}
+button{border:0;border-radius:12px;font-weight:900;cursor:pointer}.primary{background:var(--cyan);color:#061017;padding:12px 18px}
+
+:root{--bg:#070b18;--panel:#10182c;--cyan:#65f3ff;--pink:#ff4fa3;--muted:#9eacc7}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% -15%,#2a4385 0,#0b1125 38%,#050812 100%);color:#fff;font-family:Inter,system-ui,Segoe UI,sans-serif}
+.wrap{width:min(1180px,94%);margin:auto;padding:18px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:4px 0 16px}
+.logo{font-size:25px;font-weight:950;letter-spacing:.5px}.logo span{color:var(--cyan)}
+.back{color:var(--cyan);text-decoration:none;font-weight:850}
+.panel{background:#10182ce8;border:1px solid #ffffff12;border-radius:24px;padding:20px;box-shadow:0 25px 80px #0007;backdrop-filter:blur(12px)}
+h1{margin:0 0 5px;font-size:clamp(28px,5vw,46px)}.desc{margin:0 0 15px;color:var(--muted)}
+.gamebar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px}
+.fs{border:0;background:#65f3ff;color:#041016;font-weight:950;padding:10px 14px;border-radius:11px;cursor:pointer}
+.gameframe{position:relative;background:#040812;border-radius:18px;overflow:hidden;border:1px solid #ffffff12}
+canvas{display:block;width:100%;height:auto;max-width:760px;margin:auto;background:#050a16}
+.hint{text-align:center;color:var(--muted);margin:12px 0 0}
+.stats{display:flex;justify-content:center;gap:25px;margin:12px 0;font-weight:850}
+@media(max-width:600px){.panel{padding:13px}.gamebar{align-items:flex-start}.fs{padding:9px 11px}.wrap{width:96%}}
+</style></head><body>
+<main class="wrap"><div class="top"><div class="logo">PLAY<i>VEXA</i></div><a class="back" href="../index.html">← Games</a></div>
+<section class="panel"><div class="gamebar"><div><h1>Neon Snake</h1><p class="desc">Classic snake with neon effects and increasing speed.</p></div><button class="fs" id="fullscreenBtn" type="button">⛶ Fullscreen</button></div><div class="gameframe"><canvas id="game" width="760" height="520"></canvas></div><p class="hint">Arrow keys / WASD. Eat the glowing food.</p></section></main><script>const c=game,x=c.getContext('2d'),N=25,S=20;let a=[{x:12,y:12}],d={x:1,y:0},nd=d,f={x:5,y:8},sc=0,dead=0;
+onkeydown=e=>{let k=e.key.toLowerCase();if(k==='arrowup'||k==='w')nd={x:0,y:-1};if(k==='arrowdown'||k==='s')nd={x:0,y:1};if(k==='arrowleft'||k==='a')nd={x:-1,y:0};if(k==='arrowright'||k==='d')nd={x:1,y:0};if(dead&&k==='enter')location.reload()};
+function draw(){x.fillStyle='#050a16';x.fillRect(0,0,760,520);x.strokeStyle='#64f5ff14';for(let i=0;i<=N;i++){x.beginPath();x.moveTo(i*S,10);x.lineTo(i*S,510);x.moveTo(130+i*S,10);x.lineTo(130+i*S,510);x.stroke()}x.fillStyle='#ff4fa3';x.shadowBlur=25;x.shadowColor='#ff4fa3';x.beginPath();x.arc(130+f.x*S+10,10+f.y*S+10,8,0,7);x.fill();x.shadowBlur=0;a.forEach((p,i)=>{x.fillStyle=i?'#25d9b7':'#64f5ff';x.fillRect(130+p.x*S+2,10+p.y*S+2,S-4,S-4)})}
+function loop(){if(dead){x.fillStyle='#fff';x.font='bold 42px system-ui';x.textAlign='center';x.fillText('GAME OVER',380,245);x.font='18px system-ui';x.fillText('Press Enter to restart',380,280);return}d=nd;let h={x:(a[0].x+d.x+N)%N,y:(a[0].y+d.y+N)%N};if(a.some(p=>p.x===h.x&&p.y===h.y))return dead=1;a.unshift(h);if(h.x===f.x&&h.y===f.y){sc++;do f={x:Math.random()*N|0,y:Math.random()*N|0}while(a.some(p=>p.x===f.x&&p.y===f.y))}else a.pop();draw();setTimeout(loop,Math.max(45,125-sc*2))}draw();loop();</script><script>
+const fsBtn=document.getElementById('fullscreenBtn');
+if(fsBtn){
+  fsBtn.addEventListener('click',async()=>{
+    const target=document.querySelector('.gameframe')||document.querySelector('.panel');
+    try{
+      if(!document.fullscreenElement){await target.requestFullscreen();fsBtn.textContent='✕ Exit Fullscreen'}
+      else{await document.exitFullscreen();fsBtn.textContent='⛶ Fullscreen'}
+    }catch(e){}
+  });
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)fsBtn.textContent='⛶ Fullscreen'});
+}
+</script></body></html>
